@@ -181,8 +181,8 @@ aside.menu-sidebar.d-none.d-lg-block.clr {
 .row {
   display: flex;
   flex-wrap: wrap;
-  margin-right: -15px;
-  margin-left: -15px;
+  /*  margin-right: -15px;
+  margin-left: -15px;*/
 }
 .header-button {
   display: -webkit-box;
@@ -713,6 +713,10 @@ table.table.table-bordered th {
 }
 .detail-section {
   margin-top: 60px;
+}
+
+.detail-img {
+  width: 30%;
 }
 
 /*  Buttons*/
