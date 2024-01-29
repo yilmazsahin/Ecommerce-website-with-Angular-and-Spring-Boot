@@ -1,5 +1,3 @@
-/*  Common CSS*/
-
 * {
   margin: 0;
   padding: 0;
@@ -178,12 +176,7 @@ aside.menu-sidebar.d-none.d-lg-block.clr {
   -ms-flex-pack: justify;
   justify-content: space-between;
 }
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  /*  margin-right: -15px;
-  margin-left: -15px;*/
-}
+
 .header-button {
   display: -webkit-box;
   display: -webkit-flex;
@@ -314,7 +307,9 @@ input.au-input.au-input-xl {
   transform: translate(-50%, -50%);
 }
 
-/*  Left Menu Bar*/
+/* 
+Left Menu Bar
+*/
 
 .menu-sidebar {
   width: 200px;
@@ -384,8 +379,7 @@ input.au-input.au-input-xl {
   color: #0da8e4;
 }
 
-/*  Header Mobile Section
-*/
+/*  Header Mobile Section*/
 
 .header-mobile {
   position: absolute;
@@ -521,7 +515,7 @@ input.au-input.au-input-xl {
   background: #fff;
 }
 .main-content.page-m {
-  padding: 10% 15% !important;
+  padding: 10% 30% 10% 5%;
 }
 
 /*  Products List*/
@@ -672,7 +666,8 @@ select {
   color: #828482;
 }
 
-/* Shopping Cart Details*/
+/*  Shopping Cart Details
+*/
 
 .table {
   margin: 0;
@@ -704,13 +699,15 @@ table.table.table-bordered th {
   margin-left: 5px;
 }
 
-/*  Product Details*/
+/*  Product Details
+*/
 
 .price {
   margin: 15px 0 0;
   font-weight: 800;
   color: #0da8e4;
 }
+
 .detail-section {
   margin-top: 60px;
 }
@@ -719,7 +716,10 @@ table.table.table-bordered th {
   width: 30%;
 }
 
-/*  Buttons*/
+/**/
+
+/*  Buttons 
+*/
 
 .btn-info {
   color: #fff;
@@ -745,7 +745,10 @@ a.primary-btn:hover {
   font-weight: bold;
 }
 
-/*  Footer section */
+/* 
+Footer section
+
+*/
 
 footer ul li a {
   color: #fff;
@@ -766,7 +769,9 @@ footer ul li {
   padding: 10px 20px;
 }
 
-/* Media Queries */
+/*  Media Queries
+
+*/
 
 @media (max-width: 1600px) {
   .au-input-xl {
