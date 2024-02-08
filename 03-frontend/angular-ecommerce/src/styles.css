@@ -189,6 +189,13 @@ aside.menu-sidebar.d-none.d-lg-block.clr {
   -ms-flex-align: center;
   align-items: center;
 }
+login-status-header{
+  display: flex;
+  flex-wrap: wrap;justify-content: space-between;
+}
+login-status-header-info{
+  max-width: 60%;
+}
 
 .number {
   padding: 6px 0;
@@ -214,9 +221,11 @@ section {
 }
 
 .au-input-xl {
-  min-width: 935px;
+  min-width: 500px;
 }
-
+.login-status-header-info{
+  max-width: 150px;
+}
 input.au-input.au-input-xl {
   border-radius: 40px !important;
   margin-right: 15px;

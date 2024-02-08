@@ -6,8 +6,10 @@
   border: 10px solid #205b8d;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
-  border-radius: 0;
+  border-radius: 65%;
   background: #205b8d;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 .login-status-header {
   display: -webkit-box;
@@ -28,4 +30,8 @@
   -o-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
   transition: all 0.5s ease;
+  width: 60%;
 }
+/* .login-status-header-info[_ngcontent-ng-c1587955826]{
+
+} */

@@ -10,6 +10,7 @@ import { OktaAuth } from '@okta/okta-auth-js';
 export class LoginStatusComponent implements OnInit {
   isAuthenticated: boolean = false;
   userFullName: string = '';
+  storage: Storage = sessionStorage;
 
   constructor(
     private oktaAuthService: OktaAuthStateService,
@@ -23,10 +24,17 @@ export class LoginStatusComponent implements OnInit {
       this.getUserDetails();
     });
   }
+
   getUserDetails() {
     if (this.isAuthenticated) {
       this.oktaAuth.getUser().then((res) => {
         this.userFullName = res.name as string;
+
+        const theEmail = res.email;
+
+        this.storage.setItem('userEmail', JSON.stringify(theEmail));
+
+        
       });
     }
   }
