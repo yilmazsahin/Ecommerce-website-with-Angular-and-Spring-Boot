@@ -3,18 +3,19 @@ import { Injectable } from '@angular/core';
 import { Observable, map, of } from 'rxjs';
 import { Country } from '../common/country';
 import { State } from '../common/state';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ShopVistaFormService {
-  private countriesUrl = 'http://localhost:8080/api/countries';
-  private statesUrl = 'http://localhost:8080/api/states';
+  private countriesUrl = environment.shopVistaApiUrl + '/countries';
+  private statesUrl = environment.shopVistaApiUrl + '/states';
 
   constructor(private httpClient: HttpClient) {}
 
   getCreditCardMonths(startMonth: number): Observable<number[]> {
-    let data: number[] = [];
+    let data: number[] = []; 
 
     for (let theMonth = startMonth; theMonth <= 12; theMonth++) {
       data.push(theMonth);

@@ -1,3 +1,4 @@
 export const environment = {
-  production: true,
-};
+    production: true,  shopVistaApiUrl: 'https://localhost:8443/api',
+  };
+  
