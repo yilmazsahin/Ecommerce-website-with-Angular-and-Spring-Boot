@@ -138,7 +138,7 @@
           </div>
 
           <div class="row">
-            <div class="col-md-2"><label>City</label></div>
+            <div class="col-md-2"><label>District</label></div>
             <div class="col-md-9">
               <div class="input-space">
                 <input formControlName="city" type="text" />
@@ -165,7 +165,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-md-2"><label>State</label></div>
+            <div class="col-md-2"><label>City</label></div>
             <div class="col-md-9">
               <div class="input-space">
                 <select formControlName="state">
@@ -375,7 +375,7 @@
         <div formGroupName="creditCard" class="form-area">
           <h3>Credit for Debit Card</h3>
           <div id="card-element"></div>
-          <div
+          <div  id="card-errors"
             class="displayEError.text.Content!=='':'alert alert-danger mt-1'"
           >
         </div>
@@ -390,7 +390,7 @@
         </div>
         <!--Submit Button-->
         <div class="text-center">
-          <button type="submit" class="btn btn-info">Purchase</button>
+          <button type="submit"  class="btn btn-info" [disabled]="isDisabled">Purchase</button>
         </div>
       </form>
     </div>

@@ -18,6 +18,7 @@ import { OrderItem } from '../../common/order-item';
 import { Purchase } from '../../common/purchase';
 import { environment } from '../../../environments/environment';
 import { PaymentInfo } from '../../common/payment-info';
+import { Address } from '../../common/address';
 
 @Component({
   selector: 'app-checkout',
@@ -45,6 +46,7 @@ export class CheckoutComponent implements OnInit {
 
   cardElement: any;
   displayError: any = '';
+  isDisabled: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -117,44 +119,8 @@ export class CheckoutComponent implements OnInit {
           ShopVistaValidators.notOnlyWhiteSpace,
         ]),
       }),
-      creditCard: this.formBuilder.group({
-        // cardType: new FormControl('', [Validators.required]),
-        // nameOnCard: new FormControl('', [
-        //   Validators.required,
-        //   Validators.minLength(2),
-        //   ShopVistaValidators.notOnlyWhiteSpace,
-        // ]),
-        // cardNumber: new FormControl('', [
-        //   Validators.required,
-        //   Validators.pattern('[0-9]{16}'),
-        // ]),
-        // securityCode: new FormControl('', [
-        //   Validators.required,
-        //   Validators.pattern('[0-9]{3}'),
-        // ]),
-        // expirationMonth: [''],
-        // expirationYear: [''],
-      }),
+      creditCard: this.formBuilder.group({}),
     });
-
-    //populate Credit Card Months
-    // const startMonth: number = new Date().getMonth() + 1;
-    // console.log('startMonth: ' + startMonth);
-    // this.shopVistaFormService
-    //   .getCreditCardMonths(startMonth)
-    //   .subscribe((data) => {
-    //     console.log('Retrieved credit card months: ' + JSON.stringify(data));
-    //     this.creditCardMonths = data;
-    //   });
-
-    // //populate Credit Card Years
-    // this.shopVistaFormService
-    //   .getCreditCardYears()
-    //   .subscribe((data: Number[]) => {
-    //     console.log('Retrieved credit card years: ' + JSON.stringify(data));
-    //     this.creditCardYears = data.map((year) => year.valueOf());
-    //   });
-
     //populate countries
     this.shopVistaFormService.getCountries().subscribe((data) => {
       console.log('Retrieved countries: ' + JSON.stringify(data));
@@ -305,18 +271,15 @@ export class CheckoutComponent implements OnInit {
     purchase.order = order;
     purchase.orderItems = orderItems;
 
-    //Compute payment Info
-    this.paymentInfo.amount = this.totalPrice * 100;
+    this.paymentInfo.amount = Math.round(this.totalPrice * 100);
     this.paymentInfo.currency = 'USD';
+    this.paymentInfo.receiptEmail = purchase.customer.email;
 
-    //If valid form
-    //create payment intent
-    //confirm card payment
-    //place order
     if (
       !this.checkoutFormGroup.invalid &&
       this.displayError.textContent === ''
     ) {
+      this.isDisabled = true;
       this.checkoutService
         .createPaymentIntent(this.paymentInfo)
         .subscribe((paymentIntentResponse) => {
@@ -326,29 +289,47 @@ export class CheckoutComponent implements OnInit {
               {
                 payment_method: {
                   card: this.cardElement,
+                  billing_details: {
+                    email: purchase.customer.email,
+                    name: `${purchase.customer.firstName} ${purchase.customer.lastName}`,
+                    address: {
+                      line1: purchase.billingAddress.street,
+                      city: purchase.billingAddress.city,
+                      state: purchase.billingAddress.state,
+                      postal_code: purchase.billingAddress.zipCode,
+                      country: this.billingAddressCountry.value.code,
+                    },
+                  },
                 },
               },
-              {
-                handleActions: false,
-              }
+              { handleActions: false }
             )
-            .then((result: any) => {
-              if (result.error) {
-                alert(`There was an error: ${result.error.message}`);
-              } else {
-                this.checkoutService.placeOrder(purchase).subscribe({
-                  next: (response: any) => {
-                    alert(
-                      `Your order has been received.\nOrder tracking number: ${response.orderTrackingNumber}`
-                    );
-                    this.resetCart();
-                  },
-                  error: (err: any) => {
-                    alert(`There was an error: ${err.message}`);
-                  },
-                });
-              }
-            });
+            .then(
+              function (result) {
+                if (result.error) {
+                  // inform the customer there was an error
+                  alert(`There was an error: ${result.error.message}`);
+                  this.isDisabled = false;
+                } else {
+                  // call REST API via the CheckoutService
+                  this.checkoutService.placeOrder(purchase).subscribe({
+                    next: (response) => {
+                      alert(
+                        `Your order has been received.\nOrder tracking number: ${response.orderTrackingNumber}`
+                      );
+
+                      // reset cart
+                      this.resetCart();
+                      this.isDisabled = false;
+                    },
+                    error: (err) => {
+                      alert(`There was an error: ${err.message}`);
+                      this.isDisabled = false;
+                    },
+                  });
+                }
+              }.bind(this)
+            );
         });
     } else {
       this.checkoutFormGroup.markAllAsTouched();
@@ -360,31 +341,11 @@ export class CheckoutComponent implements OnInit {
     this.cartService.cartItems = [];
     this.cartService.totalPrice.next(0);
     this.cartService.totalQuantity.next(0);
+    this.cartService.persistCartItems();
 
     this.checkoutFormGroup.reset();
 
     this.router.navigateByUrl('/products');
-  }
-
-  handleMonthsAndYears() {
-    const creditCardFormGroup = this.checkoutFormGroup.get('creditCard');
-    const currentYear: Number = new Date().getFullYear();
-    const selectedYear: number = Number(
-      creditCardFormGroup?.value.expirationYear
-    );
-    let startMonth: number;
-
-    if (currentYear === selectedYear) {
-      startMonth = new Date().getMonth() + 1;
-    } else {
-      startMonth = 1;
-    }
-    this.shopVistaFormService
-      .getCreditCardMonths(startMonth)
-      .subscribe((data) => {
-        console.log('reRetrievet credit cart mnths' + JSON.stringify(data));
-        this.creditCardMonths = data;
-      });
   }
 
   getStates(formGroupName: string) {
